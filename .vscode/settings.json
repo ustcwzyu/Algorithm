@@ -1,6 +1,7 @@
 {
     "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "files.associations": {
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "iomanip": "cpp"
     }
 }
