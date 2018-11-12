@@ -62,7 +62,7 @@ class QsortWithInsertionSort{
         }
 
         void  QuickSort(int a[], int l, int h, int min_length) {
-            if (l < h && h-l > min_length) {
+            if (l < h && h-l < min_length) {
                 return;
             }
             if (l < h) {
@@ -101,6 +101,7 @@ int main() {
     cin >> n;
     RandomNumberGenerator _r;
     int *a = new int[n];
+    Qsort _instance1;
     QsortWithInsertionSort _instance2;
     int times;
     cin >> times;
@@ -109,11 +110,16 @@ int main() {
         int k;
         cin >> k;
         times--;
+        clock_t start1 = clock();
+        _instance1.QuickSort(a, 0 , n-1);
+        clock_t end1 = clock();
+        _r.Generator(n, a);
         clock_t start2 = clock();
         _instance2.QuickSort(a, 0 , n-1, k);
         _instance2.InsertionSort(a, n-1);
         clock_t end2 = clock();
-        cout << "The k is " << k << " and the time is " << double(end2-start2)/CLOCKS_PER_SEC << endl;
+        cout << "The time of quicksort is " << double(end1-start1)/CLOCKS_PER_SEC << ".\n" ;
+        cout <<"The k is " << k << " and the optimized algorithm time is " << double(end2-start2)/CLOCKS_PER_SEC << "." << endl;
     }
     system("pause");
     return 0;

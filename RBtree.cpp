@@ -28,9 +28,10 @@ class RBTree {
         RBTree():_root(NULL) {_root = NULL;};
 
         bool insert(RBTNode<K, V>* &root, RBTNode<K, V> *z) {
-            RBTNode<K, V> *y = NULL;
-            RBTNode<K, V> *x = _root;
-            while (x != NULL) {
+            RBTNode<K, V> *y = NULL; //y is used to record the node scanned.
+            RBTNode<K, V> *x = _root; //scan from the root.
+            while (x != NULL) { 
+                //find the position to insert.
                 y = x;
                 if (z->_key <= x->_key) {
                     x = x->_left;
@@ -57,15 +58,20 @@ class RBTree {
 
         bool insertfixup(RBTNode<K, V>* &root, RBTNode<K, V> *z) {
             while(z->_parent && z->_parent->_color == RED) {
+                //if the color of the parent z is black, no need for fixing up.
                 if (z->_parent == z->_parent->_parent->_left) {
+                    //case 1, 2, 3
                     RBTNode<K, V> *y = z->_parent->_parent->_right;
                     if (y != NULL && y->_color == RED) {
+                        // case 1
                         y->_color = BLACK;
                         z->_parent->_color = BLACK;
                         z->_parent->_parent->_color = RED;
                         z = z->_parent->_parent;
                     } else {
+                        //case 2, 3
                         if (z == z->_parent->_right) {
+                            //transition between case 2 and case 3
                             z = z->_parent;
                             left_rotate(root, z);
                         }
@@ -74,6 +80,7 @@ class RBTree {
                         right_rotate(root, z->_parent->_parent);
                     }
                 } else if (z->_parent == z->_parent->_parent->_right) {
+                    //case 4, 5, 6
                     RBTNode<K, V> *y = z->_parent->_parent->_left;
                     if (y != NULL && y->_color == RED) {
                         y->_color = BLACK;
@@ -170,7 +177,7 @@ class RBTree {
 
 int main()
 {
-    int a[]= {10, 40, 30, 60, 90, 70, 20, 50, 80};
+    int a[]= {50, 130, 10, 40, 30, 60};
     int i;
     int ilen = (sizeof(a)) / (sizeof(a[0])) ;
     RBTree<int, int>* tree=new RBTree<int, int>();
@@ -183,10 +190,10 @@ int main()
     for(i=0; i<ilen; i++) 
     {
         tree->insert(a[i], a[i]);
-            cout << "--Add Node: " << a[i] << endl;
-            cout << "--The details of the tree: " << endl;
-            tree->print();
-            cout << endl;
+        cout << "--Add Node: " << a[i] << endl;
+        cout << "--The details of the tree: " << endl;
+        tree->print();
+        cout << endl;
     }
 
     cout << "\n-- Inorder: ";
