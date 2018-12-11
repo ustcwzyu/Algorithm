@@ -31,8 +31,12 @@ class dataGenerator {
         }
 };
 
-bool compare(point a, point b) {
+bool comparex(point a, point b) {
     return a.x < b.x;
+}
+
+bool comparey(point a, point b) {
+    return a.y < b.y;
 }
 
 class Closest {
@@ -57,7 +61,7 @@ class Closest {
                 point *pts1 = new point[length];
                 point *pts2 = new point[length];  
 
-                sort(points, points+length, compare);   //sort with the compare
+                sort(points, points+length, comparex);   //sort with the compare
                 // cout << "--The sorted points are:" << endl;
                 // for (int i = 0; i < length; i++) {
                 //     cout << "(" << points[i].x << ", " << points[i].y << ") ";
@@ -91,7 +95,7 @@ class Closest {
                 // cout << "--The mid is " << mid << ". The min distance now is " << distance << endl;
                 // cout << "--The points near the mid are:" << endl;
                 for(i = 0, k = 0; i < length; i++) {
-                    if(abs(points[i].x - mid) <= distance) {
+                    if(abs(points[i].x - mid) < distance) {
                         // cout << "(" << points[i].x << ", " << points[i].y << ") ";
                         pts3[k++] = points[i];
                     }
@@ -100,8 +104,10 @@ class Closest {
 
 
                 //Combine.
+                sort(pts3, pts3+k, comparey);
                 for(i = 0; i < k; i++) {
                     for(j = i+1; j <= i+7 && j < k; j++) {
+                        if (pts3[j].y-pts3[i].y > distance) break;
                         if(dist(pts3[i], pts3[j]) < distance) {
                             distance = dist(pts3[i], pts3[j]);
                             a=pts3[i];
@@ -125,22 +131,28 @@ int main() {
 
     point r1, r2;
     Closest Solution;
+    clock_t start = clock();
     double dist = Solution.ClosestPair(p, length, r1, r2);
+    clock_t end = clock();
     cout <<"The closest points are (" << r1.x << ", " << r1.y << ") and (" << r2.x << ", " << r2.y << ")."<< endl;
     cout << "The closest distance is " << dist << endl;
-    // double min = 10000000;
-    // for (int i = 0; i < length; i++) {
-    //     for (int j = i+1; j < length; j++) {
-    //         if(Solution.dist(p[i], p[j]) < min) {
-    //             min = Solution.dist(p[i], p[j]);
-    //             r1 = p[i];
-    //             r2 = p[j];
-    //         }
-    //     }
-    // }
-    // cout << endl;
-    // cout <<"The closest points are (" << r1.x << ", " << r1.y << ") and (" << r2.x << ", " << r2.y << ")."<< endl;
-    // cout << "The closest distance is " << min << endl;
+    cout << "The time is:" << double(end-start)/CLOCKS_PER_SEC << endl;
+    double min = 10000000;
+    start = clock();
+    for (int i = 0; i < length; i++) {
+        for (int j = i+1; j < length; j++) {
+            if(Solution.dist(p[i], p[j]) < min) {
+                min = Solution.dist(p[i], p[j]);
+                r1 = p[i];
+                r2 = p[j];
+            }
+        }
+    }
+    end = clock();
+    cout << endl;
+    cout <<"The closest points are (" << r1.x << ", " << r1.y << ") and (" << r2.x << ", " << r2.y << ")."<< endl;
+    cout << "The closest distance is " << min << endl;
+    cout << "The time is:" << double(end-start)/CLOCKS_PER_SEC << endl;
     system("pause");
     return 0;
 }
